@@ -20,6 +20,7 @@ require 'navbar.php' ?>
             <th scope="col">#</th>
             <th scope="col">Chat ID</th>
             <th scope="col">Conversion type</th>
+            <th scope="col">Amount</th>
             <th scope="col">Date</th>
         </tr>
         </thead>
@@ -33,6 +34,8 @@ require 'navbar.php' ?>
                     echo $record['chat_id'] ?></td>
                 <td><?php
                     echo $record['status'] ?></td>
+                <td><?php
+                    echo $record['amount'] ?></td>
                 <td><?php
                     echo $record['created_at'] ?></td>
             </tr>

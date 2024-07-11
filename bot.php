@@ -3,18 +3,18 @@
 declare(strict_types=1);
 
 use GuzzleHttp\Client;
+
 $token = "7407969760:AAFQ-TeQg2y76rqFNSejmHnnsDvIw82p1kk";
 $tgApi = "https://api.telegram.org/bot$token/";
 
-$client = new Client(['base_uri' => $tgApi]);
+$http     = new Client(['base_uri' => $tgApi]);
+$currency = new Currency();
 if (isset($update->message)) {
-    $message = $update->message;
-    $chat_id = $message->chat->id;
-    $type    = $message->chat->type;
-    $miid    = $message->message_id;
-    $name    = $message->from->first_name;
-//        $lname = $message->from->last_name;
-//        $full_name = $name . " " . $lname;
+    $message          = $update->message;
+    $chat_id          = $message->chat->id;
+    $type             = $message->chat->type;
+    $miid             = $message->message_id;
+    $name             = $message->from->first_name;
     $user             = $message->from->username ?? '';
     $fromid           = $message->from->id;
     $text             = $message->text;
@@ -35,9 +35,21 @@ if (isset($update->message)) {
     $fid              = $message->forward_from_message_id;
 }
 
-$client->post('sendMessage', [
+$input             = explode(':', $text);
+$original_currency = $input[0];
+$target_currency   = $input[1];
+$amount            = (float) $input[2];
+
+$converted_amount = $currency->convert(
+    $chat_id,
+    $original_currency,
+    $target_currency,
+    $amount);
+
+
+$http->post('sendMessage', [
     'form_params' => [
         'chat_id' => $chat_id,
-        'text'    => $text ?? 'Please send only text'
+        'text'    => "$converted_amount $target_currency"
     ]
 ]);
