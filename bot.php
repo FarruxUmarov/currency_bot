@@ -2,54 +2,51 @@
 
 declare(strict_types=1);
 
-use GuzzleHttp\Client;
-
-$token = "7407969760:AAFQ-TeQg2y76rqFNSejmHnnsDvIw82p1kk";
-$tgApi = "https://api.telegram.org/bot$token/";
-
-$http     = new Client(['base_uri' => $tgApi]);
 $currency = new Currency();
+$bot      = new BotHandler();
+
 if (isset($update->message)) {
     $message          = $update->message;
     $chat_id          = $message->chat->id;
-    $type             = $message->chat->type;
-    $miid             = $message->message_id;
-    $name             = $message->from->first_name;
+    $type             = $message->chat->type ?? 'Not specified';
+    $miid             = $message->message_id ?? 'Not specified';
+    $name             = $message->from->first_name ?? 'Not specified';
     $user             = $message->from->username ?? '';
-    $fromid           = $message->from->id;
-    $text             = $message->text;
-    $title            = $message->chat->title;
-    $chatuser         = $message->chat->username;
+    $fromid           = $message->from->id ?? 'Not specified';
+    $text             = $message->text ?? 'Not specified';
+    $title            = $message->chat->title ?? 'Not specified';
+    $chatuser         = $message->chat->username ?? 'Not specified';
     $chatuser         = $chatuser ? $chatuser : "Shaxsiy Guruh!";
-    $caption          = $message->caption;
-    $entities         = $message->entities;
-    $entities         = $entities[0];
-    $left_chat_member = $message->left_chat_member;
-    $new_chat_member  = $message->new_chat_member;
-    $photo            = $message->photo;
-    $video            = $message->video;
-    $audio            = $message->audio;
-    $voice            = $message->voice;
-    $reply            = $message->reply_markup;
-    $fchat_id         = $message->forward_from_chat->id;
-    $fid              = $message->forward_from_message_id;
+    $caption          = $message->caption ?? 'Not specified';
+    $entities         = $message->entities ?? 'Not specified';
+    $entities         = $entities[0] ?? 'Not specified';
+    $left_chat_member = $message->left_chat_member ?? 'Not specified';
+    $new_chat_member  = $message->new_chat_member ?? 'Not specified';
+    $photo            = $message->photo ?? 'Not specified';
+    $video            = $message->video ?? 'Not specified';
+    $audio            = $message->audio ?? 'Not specified';
+    $voice            = $message->voice ?? 'Not specified';
+    $reply            = $message->reply_markup ?? 'Not specified';
+    $fchat_id         = $message->forward_from_chat->id ?? 'Not specified';
+    $fid              = $message->forward_from_message_id ?? 'Not specified';
+
+    if ($text === '/start') {
+        $bot->handleStartCommand($chat_id);
+        return;
+    }
 }
 
-$input             = explode(':', $text);
-$original_currency = $input[0];
-$target_currency   = $input[1];
-$amount            = (float) $input[2];
+if ($update->callback_query) {
+    $callbackQuery = $update->callback_query;
+    $callbackData  = $callbackQuery->data;
+    $chatId        = $callbackQuery->message->chat->id;
+    $messageId     = $callbackQuery->message->message_id;
 
-$converted_amount = $currency->convert(
-    $chat_id,
-    $original_currency,
-    $target_currency,
-    $amount);
-
-
-$http->post('sendMessage', [
-    'form_params' => [
-        'chat_id' => $chat_id,
-        'text'    => "$converted_amount $target_currency"
-    ]
-]);
+    $bot->http->post('sendMessage', [
+        'form_params' => [
+            'chat_id' => $chatId,
+            'text'    => print_r($callbackQuery, true),
+        ]
+    ]);
+    return;
+}
