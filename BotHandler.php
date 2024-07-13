@@ -7,7 +7,7 @@ use GuzzleHttp\Exception\GuzzleException;
 
 class BotHandler
 {
-    const string TOKEN = "7407969760:AAFQ-TeQg2y76rqFNSejmHnnsDvIw82p1kk";
+    const string TOKEN = "6038247949:AAEAkQNMwsFUynBu-wxOhPEaGgSrbDELp0w";
     const string API   = "https://api.telegram.org/bot".self::TOKEN."/";
     public Client $http;
 

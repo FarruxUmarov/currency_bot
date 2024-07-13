@@ -6,6 +6,6 @@ class DB
 {
     public static function connect(): PDO
     {
-        return new PDO('mysql:host=localhost;dbname=currency_converter', 'root', '1234');
+        return new PDO('mysql:host=localhost;dbname=currency_converter', 'umarov', '2505');
     }
 }
