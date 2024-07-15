@@ -30,20 +30,26 @@ class DB
     {
         $query = "SELECT state FROM savestate WHERE userchatid = :userchatid ORDER BY data DESC LIMIT 1";
         $stmt = $this->pdo->prepare($query);
-        $stmt->bindParam(':userchatid', $userChatId);
+        $stmt->bindParam(':userchatid', $userChatId, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+    
         if (!$result) {
             return "Error: No conversion data found";
         }
+        
         $state = $result['state'];
         $to_converter = explode(":", $state);
-
+    
+        if (count($to_converter) < 2) {
+            return "Error: Invalid state format";
+        }
+    
         $response = $this->currency->converter($to_converter[1], $amount);
-
-        return sprintf('%.2f', $response);
+    
+        return number_format($response, 2, ',', '.');
     }
+    
 
     public function sendStateNameUser (int $userChatId) {
         $query = "SELECT state FROM savestate WHERE userchatid = :userchatid ORDER BY data DESC LIMIT 1";

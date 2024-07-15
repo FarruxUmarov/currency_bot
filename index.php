@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 require 'vendor/autoload.php';
 require 'DB.php';
-require 'Currency.php';
+// require 'Currency.php';
 
 use GuzzleHttp\Client;
 
@@ -18,8 +18,8 @@ $update = json_decode(file_get_contents('php://input'));
 $keyboard = [
     'inline_keyboard' => [
         [
-            ['text' => 'USD => UZS', 'callback_data' => 'usd:uzs'],
-            ['text' => 'UZS => USD', 'callback_data' => 'uzs:usd']
+            ['text' => '🇺🇸 USD => 🇺🇿 UZS', 'callback_data' => 'usd:uzs'],
+            ['text' => '🇺🇿 UZS => 🇺🇸 USD', 'callback_data' => 'uzs:usd']
         ]
     ]
 ];
