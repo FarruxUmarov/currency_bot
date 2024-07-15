@@ -34,7 +34,7 @@ $allUsersInfo = $allusers->users();
             <?php foreach ($allUsersInfo as $userInfo): ?>
                 <tr>
                     <th scope="row"><?php echo $userInfo['id']; ?></th>
-                    <td><?php echo $userInfo['userchatid']; ?></td>
+                    <td><?php echo $userInfo['chatId']; ?></td>
                     <td><?php echo $userInfo['state']; ?></td>
                     <td><?php echo $userInfo['amount']; ?></td>
                     <td><?php echo $userInfo['data']; ?></td>
